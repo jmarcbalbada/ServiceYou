@@ -13,7 +13,7 @@ ServiceYou is a web application that facilitates transactions between Clients an
 - **Payment System:**
   The platform includes a payment system to handle financial transactions between Clients and Workers.
 
-##Developers
+## Developers
 - [HeatherWenCalunod](https://github.com/HeatherWenCalunod)
 - [jmarcbalbada](https://github.com/jmarcbalbada)
 - [JasonCarloObiso](https://github.com/JasonObiso)
