@@ -6,7 +6,7 @@ from django.db import models
 # Will be calling Customer -> Client
 
 class Client(models.Model):
-    clientID = models.CharField(max_length=10, primary_key=True)
+    clientID = models.AutoField(primary_key=True)
     username = models.CharField(max_length=10, unique=True)
     password = models.CharField(max_length=10)
     firstName = models.CharField(max_length=20)
@@ -16,11 +16,11 @@ class Client(models.Model):
     email = models.EmailField()
 
     def __str__(self):
-        return self.clientID
+        return str(self.clientID)
 
 
 class Worker(models.Model):
-    workerID = models.CharField(max_length=10, primary_key=True)
+    workerID = models.AutoField(primary_key=True)
     username = models.CharField(max_length=10, unique=True)
     password = models.CharField(max_length=10)
     firstName = models.CharField(max_length=20)
@@ -30,20 +30,20 @@ class Worker(models.Model):
     email = models.EmailField()
 
     def __str__(self):
-        return self.workerID
+        return str(self.workerID)
 
 
 class Service(models.Model):
-    serviceID = models.CharField(max_length=10, primary_key=True)
+    serviceID = models.AutoField(primary_key=True)
     serviceName = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.serviceID
+        return str(self.serviceID)
 
 
 class ServiceRequest(models.Model):
-    requestID = models.CharField(max_length=10, primary_key=True)
+    requestID = models.AutoField(primary_key=True)
     clientID = models.ForeignKey(Client, on_delete=models.CASCADE)
     workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
     serviceID = models.ForeignKey(Service, on_delete=models.CASCADE)
@@ -53,11 +53,11 @@ class ServiceRequest(models.Model):
     dateFinished = models.DateField()
 
     def __str__(self):
-        return self.requestID
+        return str(self.requestID)
 
 
 class Payment(models.Model):
-    paymentID = models.CharField(max_length=10, primary_key=True)
+    paymentID = models.AutoField(primary_key=True)
     requestID = models.ForeignKey(ServiceRequest, on_delete=models.CASCADE)
     clientID = models.ForeignKey(Client, on_delete=models.CASCADE)
     workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
@@ -67,23 +67,23 @@ class Payment(models.Model):
     amountPaid = models.FloatField()
 
     def __str__(self):
-        return self.paymentID
+        return str(self.paymentID)
 
 
 class RateService(models.Model):
-    rateID = models.CharField(max_length=10, primary_key=True)
+    rateID = models.AutoField(primary_key=True)
     requestID = models.ForeignKey(ServiceRequest, on_delete=models.CASCADE)
     rateValue = models.IntegerField()
     comment = models.CharField(max_length=500)
 
     def __str__(self):
-        return self.rateID
+        return str(self.rateID)
 
 
 class PostService(models.Model):
-    postID = models.CharField(max_length=10, primary_key=True)
+    postID = models.AutoField(primary_key=True)
     workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
     serviceID = models.ForeignKey(Service, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.postID
+        return str(self.postID)
