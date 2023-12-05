@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 
@@ -85,5 +86,12 @@ class PostService(models.Model):
     workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
     serviceID = models.ForeignKey(Service, on_delete=models.CASCADE)
 
+    # Additional attributes
+    title = models.CharField(default="",max_length=100, help_text="Title of the service post")
+    description = models.TextField(default="", help_text="Description of the service")
+    location = models.CharField(default="", max_length=255)
+    date_posted = models.DateTimeField(default=timezone.now, help_text="Date and time when the post was created")
+    is_active = models.BooleanField(default=True)
+
     def __str__(self):
-        return str(self.postID)
+        return f"Post ID: {self.postID}, Title: {self.title}, Worker: {self.workerID}, Service: {self.serviceID}"

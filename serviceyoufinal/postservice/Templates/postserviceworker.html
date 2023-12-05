@@ -21,7 +21,7 @@
             padding: 30px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            width: 300px;
+            width: 600px;
         }
 
         h1 {
@@ -34,7 +34,8 @@
         }
 
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        textarea {
             width: 100%;
             padding: 10px;
             margin: 10px -10px;
@@ -70,9 +71,24 @@
     </style>
 </head>
 <body>
-    <form>
+    <form method="post" action="">
+        {% csrf_token %}
         <h1>Post your Service Here!</h1>
-        {{ form.as_p }}
+        <p>
+            <label>Title:</label> {{ form.title }}
+        </p>
+        <p>
+            <label>Description:</label> {{ form.description }}
+        </p>
+        <p>
+            <label>Location:</label> {{ form.location }}
+        </p>
+        <p>
+            <label>Worker ID:</label> {{ form.workerID }}
+        </p>
+        <p>
+            <label>Service ID:</label> {{ form.serviceID }}
+        </p>
         <p>
             <input type="submit" value="Submit!">
         </p>
