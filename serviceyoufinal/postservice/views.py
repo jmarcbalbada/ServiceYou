@@ -40,7 +40,7 @@ class PostServiceWorker(View):
     template = 'postserviceworker.html'
 
     def get(self, request):
-        postService = PostServiceWorkerForm()
+        postService = PostServiceForm()
         return render(request, self.template, {'form': postService})
 
 
