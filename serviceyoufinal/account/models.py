@@ -36,8 +36,8 @@ class Worker(models.Model):
 
 class Service(models.Model):
     serviceID = models.AutoField(primary_key=True)
-    serviceName = models.CharField(max_length=50)
-    description = models.CharField(max_length=200)
+    serviceName = models.CharField(max_length=49)
+    description = models.CharField(max_length=199)
 
     def __str__(self):
         return str(self.serviceID)
