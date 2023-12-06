@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+ <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #2980B9, #6DD5FA);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 600px;
+        }
+
+        form h2 {
+            background: #2980B9;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        form p {
+            padding: 20px;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form input[type="email"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form input[type="submit"] {
+            background: #2980B9;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            margin-right:50px;
+            margin-bottom: 40px;
+        }
+
+        form input[type="submit"]:hover {
+            background: #1F6077;
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h2>Service Request Form</h2>
+        {{form.as_p}}
+            <input type="submit" value="Submit Request">
+        </form>
+</body>
+</html>
