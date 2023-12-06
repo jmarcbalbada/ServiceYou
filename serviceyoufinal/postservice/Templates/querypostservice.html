@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query Post Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            margin-left: 250px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: -550px;
+            margin-right: -150px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 600px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin-left: -400px;
+            margin-bottom: 20px;
+            margin-top: -200px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th {
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .button-container {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: -550px;
+            margin-left: 150px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        td:nth-child(4),
+        td:nth-child(5){
+        text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Query Post Services</h1>
+    {% if postServices %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Worker ID</th>
+                    <th>Service ID</th>
+                    <!-- Add more headers as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in postServices %}
+                    <tr>
+                        <td>{{ row.0 }}</td>
+                        <td>{{ row.1 }}</td>
+                        <td>{{ row.2 }}</td>
+                        <td>{{ row.3 }}</td>
+                        <td>{{ row.4 }}</td>
+                        <!-- Add more columns as needed -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No post services found.</p>
+    {% endif %}
+
+    <div class="button-container">
+            <button class="button" onclick="window.location.href='{% url 'homepage' %}'">Home</button>
+            <button class="button" onclick="window.location.href='{% url 'posting' %}'">Post Service</button>
+        </div>
+</body>
+</html>
