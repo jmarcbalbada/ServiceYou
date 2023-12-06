@@ -86,9 +86,9 @@
         <label>Status:</label>
         {{ form.status }}
 
-        <label>Date Accepted:</label>
+        <label>Client ID:</label>
         <input type="date" name="dateAccepted" value="{% if form.dateAccepted.value %}{{ form.dateAccepted.value|date:'Y-m-d' }}{% endif %}">
-        <label>Date Finished:</label>
+        <label>Client ID:</label>
         <input type="date" name="dateFinished" value="{% if form.dateFinished.value %}{{ form.dateFinished.value|date:'Y-m-d' }}{% endif %}">
 
             <input type="submit" value="Submit Request">
