@@ -49,9 +49,14 @@ class ServiceRequest(models.Model):
     workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
     serviceID = models.ForeignKey(Service, on_delete=models.CASCADE)
     requestDate = models.DateField()
-    status = models.IntegerField()
-    dateAccepted = models.DateField()
-    dateFinished = models.DateField()
+    SERVICE_STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    )
+    status = models.CharField(max_length=10, choices=SERVICE_STATUS_CHOICES, default='Pending')
+    dateAccepted = models.DateField(null=True, blank=True)
+    dateFinished = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return str(self.requestID)
