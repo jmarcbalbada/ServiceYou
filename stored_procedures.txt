@@ -81,6 +81,60 @@ DELIMITER ;
 
 --rateservice--
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckIfRatingExists`(IN `p_requestID` INT, OUT `p_ratingExists` BOOLEAN)
+BEGIN
+    SELECT COUNT(*) INTO p_ratingExists
+    FROM account_rateservice
+    WHERE requestID_id = p_requestID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckRequestStatus`(IN p_requestID INT, OUT p_isDone BOOLEAN)
+BEGIN
+    DECLARE status_val VARCHAR(20);
+
+    SELECT status INTO status_val
+    FROM account_servicerequest
+    WHERE requestID = p_requestID;
+
+    IF status_val IN ('Completed', 'Cancelled') THEN
+        SET p_isDone = TRUE;
+    ELSE
+        SET p_isDone = FALSE;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RateService`(IN `p_requestID` INT, IN `p_rating` INT, IN `p_comment` TEXT)
+BEGIN
+    DECLARE isDone BOOLEAN;
+    DECLARE ratingExists BOOLEAN;
+
+    CALL CheckRequestStatus(p_requestID, isDone);
+    CALL CheckIfRatingExists(p_requestID, ratingExists);
+
+    IF isDone THEN
+        SET p_rating = CASE
+            WHEN p_rating > 5 THEN 5
+            WHEN p_rating < 1 THEN 1
+            ELSE p_rating
+        END;
+
+        IF NOT ratingExists THEN
+            INSERT INTO account_rateservice (rateValue, comment, requestID_id)
+            VALUES (p_rating, p_comment, p_requestID);
+        ELSE
+            SELECT 'Error: Rating already exists for this request.' AS errorMessage;
+        END IF;
+    ELSE
+        SELECT 'Error: Request not completed or cancelled.' AS errorMessage;
+    END IF;
+END$$
+DELIMITER ;
+
 
 --servicerequest--
 
