@@ -7,6 +7,7 @@ urlpatterns = [
     # path('login/', views.LoginWorker.as_view(), name='login'),
     path('posting/', views.PostServiceWorker.as_view(), name='posting'),
     path('querypostservice/', views.QueryPostServiceView.as_view(), name='querypostservice'),
+    path('deletepostservice/', views.DeletePostService.as_view(), name='deletepostservice'),
     # path('httpregister/', views.registration, name='httpregister'),
 
 ]
