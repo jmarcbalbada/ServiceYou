@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete PostService</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px -10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #cc0000;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .button-container {
+            background-color: #fff;
+            padding: 20px;
+            margin-left: 100px;
+            margin-top: 0px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="">
+        {% csrf_token %}
+        <h1>Delete PostService</h1>
+        <p>
+            <label for="id_postID">Enter Post ID:</label>
+            <input type="text" id="id_postID" name="postID" required>
+        </p>
+        <p>
+            <input type="submit" value="Delete">
+        </p>
+    </form>
+
+        <div class="button-container">
+            <button class="button" onclick="window.location.href='{% url 'homepage' %}'">Home</button>
+            <button class="button" onclick="window.location.href='{% url 'querypostservice' %}'">Query Service <b>(admin only!!)</b></button>
+        </div>
+</body>
+</html>

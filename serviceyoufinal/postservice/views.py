@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 from django.http import HttpResponseRedirect
@@ -58,7 +58,7 @@ class PostServiceWorker(View):
                                  postService.description, postService.location, postService.date_posted,
                                  1, 0])
 
-            return render(request, self.template, {'form': PostServiceForm()})
+            return redirect('querypostservice')
         else:
             return render(request, self.template, {'form': postServiceForm})
 
@@ -80,6 +80,27 @@ class QueryPostServiceView(View):
         return render(request, self.template_name, context)
 
 
+class DeletePostService(View):
+    template = 'deletepostservice.html'
+
+    def get(self,request):
+        return render(request, self.template)
+
+    def post(self, request):
+        post_id = request.POST.get('postID')
+
+        with connection.cursor() as cursor:
+            # Call the stored procedure
+            cursor.callproc('deletePostServiceByPostID', [post_id, None])
+            cursor.execute("SELECT @p_isDeleted")
+            is_deleted = cursor.fetchone()[0]
+
+        if is_deleted:
+            messages.success(request, f"PostService with ID {post_id} deleted successfully.")
+        else:
+            messages.error(request, f"Failed to delete PostService with ID {post_id}.")
+
+        return redirect('querypostservice')
 
 # class RegisterWorker(View):
 #     template = 'register.html'
