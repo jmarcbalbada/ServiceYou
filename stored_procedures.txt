@@ -1,0 +1,86 @@
+-- PLACE YOUR STORED PROCEDURE AND VIEWS HERE --
+
+
+--account--
+
+
+--payrequest--
+
+
+--postservice--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletePostServiceByPostID`(
+    IN p_postID INT,
+    OUT p_isDeleted BOOLEAN
+)
+BEGIN
+    DECLARE isDeleted BOOLEAN DEFAULT FALSE;
+
+    DELETE FROM account_postservice
+    WHERE postID = p_postID;
+
+    -- Check if the deletion was successful
+    SELECT ROW_COUNT() > 0 INTO isDeleted;
+
+    SET p_isDeleted = isDeleted;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertPostService`(IN `p_workerID` INT, IN `p_serviceID` INT, IN `p_title` VARCHAR(100), IN `p_description` TEXT, IN `p_location` VARCHAR(255), IN `p_date_posted` DATETIME, IN `p_is_active` BOOLEAN, OUT `p_isAdded` BOOLEAN)
+BEGIN
+    DECLARE isAdded BOOLEAN DEFAULT FALSE;
+
+    INSERT INTO account_postservice (workerID_id, serviceID_id, title, description, location, date_posted, is_active)
+    VALUES (p_workerID, p_serviceID, p_title, p_description, p_location, p_date_posted, p_is_active);
+
+    -- Check if the insertion was successful
+    SELECT ROW_COUNT() > 0 INTO isAdded;
+
+    SET p_isAdded = isAdded;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queryPostService`(IN `p_workerID` INT)
+BEGIN
+    SELECT postID AS 'Post ID',
+    serviceID_id AS 'Service ID',
+    workerID_id AS 'Worker ID',
+    date_posted AS 'Date Posted',
+    description AS 'Description',
+    is_active AS 'Active',
+    location AS 'Location',
+    title AS 'Title'
+    FROM account_postservice
+    WHERE workerID_id = p_workerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updatePostServiceTitle`(
+    IN p_postID INT,
+    IN p_title VARCHAR(100),
+    OUT p_isUpdated BOOLEAN
+)
+BEGIN
+    DECLARE isUpdated BOOLEAN DEFAULT FALSE;
+
+    UPDATE account_postservice
+    SET title = p_title
+    WHERE postID = p_postID;
+
+    -- Check if the update was successful
+    SELECT ROW_COUNT() > 0 INTO isUpdated;
+
+    SET p_isUpdated = isUpdated;
+END$$
+DELIMITER ;
+
+
+--rateservice--
+
+
+--servicerequest--
+
