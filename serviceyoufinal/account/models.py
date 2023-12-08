@@ -87,8 +87,13 @@ class Payment(models.Model):
     workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
     amount = models.FloatField()
     paymentDate = models.DateField()
-    amountDate = models.FloatField()
+    amountDue = models.FloatField(default=0.0,editable= False)
     amountPaid = models.FloatField()
+    PAYMENT_STATUS = (
+        ('Ongoing', 'Ongoing'),
+        ('Completed', 'Completed'),
+    )
+    status = models.CharField(max_length=10, choices=PAYMENT_STATUS, default='Ongoing',editable=False)
 
     def __str__(self):
         return str(self.paymentID)

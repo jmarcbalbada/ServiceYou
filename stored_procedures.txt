@@ -5,7 +5,41 @@
 
 
 --payrequest--
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertPayment`(IN `p_request_id` INT, IN `p_client_id` INT, IN `p_worker_id` INT, IN `p_amount` DOUBLE, IN `p_payment_date` DATE, IN `p_amount_paid` DOUBLE, OUT `p_success` INT)
+BEGIN
+    DECLARE v_balance DOUBLE;
 
+    -- Insert into account_payment table
+    INSERT INTO account_payment (amount,paymentDate, amountPaid,requestID_id, clientID_id, workerID_id, amountDue, status)
+    VALUES ( p_amount, p_payment_date, p_amount_paid, p_request_id, p_client_id, p_worker_id, 0.0, 'Ongoing');
+
+    -- Calculate balance (amount - amount_paid)
+    SELECT (p_amount - p_amount_paid) INTO v_balance;
+
+    -- Update amountDue in the inserted record
+    UPDATE account_payment
+    SET amountDue = v_balance
+    WHERE requestID_id = p_request_id AND clientID_id = p_client_id AND workerID_id = p_worker_id;
+
+    -- Check if total amount_paid equals the amount, then set status to Completed
+    UPDATE account_payment p
+    SET p.status = 'Completed'
+    WHERE p.requestID_id = p_request_id AND p.clientID_id = p_client_id AND p.workerID_id = p_worker_id
+        AND p.amountDue = 0.0
+        AND (SELECT SUM(amountPaid) FROM account_payment WHERE requestID_id = p_request_id AND clientID_id = p_client_id AND workerID_id = p_worker_id) >= p.amount;
+
+    -- Set the success status
+    SET p_success = 1; -- 1 indicates success
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeletePayment`(IN p_paymentID INT)
+BEGIN
+    DELETE FROM account_payment WHERE paymentID = p_paymentID;
+END$$
+DELIMITER ;
 
 --postservice--
 
