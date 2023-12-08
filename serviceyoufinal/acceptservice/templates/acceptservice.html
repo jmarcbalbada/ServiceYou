@@ -17,7 +17,6 @@
             Accept Service Request
         </div>
     </h1>
-    {{requestid}}
     {% for service in services %}
         <form method="POST">
             {% csrf_token %}

@@ -5,15 +5,16 @@ from django.db import connection
 
 def acceptservice(request):
     cursor = connection.cursor()
-    cursor.callproc('workerpendingrequest',[11])
+    cursor.callproc('workerpendingrequest',[1])
     services = cursor.fetchall()
     cursor.close()
     if request.method == "POST":
         requestid = request.POST['requestid']
         cursor = connection.cursor()
         result = 'nganung gwapo si winson'
-        cursor.callproc('acceptrequest', [11,requestid,result])
+        cursor.callproc('acceptrequest', [1,requestid,result])
         cursor.close()
-        # services = cursor.fetchall()
+
         return render(request, 'acceptservice.html', {'services': services,'requestid':requestid,'result':result})
-    return render(request, 'acceptservice.html', {'services': services})
+    elif request.method == "GET":
+        return render(request, 'acceptservice.html', {'services': services})
