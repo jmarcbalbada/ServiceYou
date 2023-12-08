@@ -77,7 +77,40 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 0 10px;
+            font-weight:bold;
         }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 150%;
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0; /* Adjust the padding as needed */
+            margin-left: 0px;
+            z-index: 1000; /* Ensure the navbar appears above other elements */
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 16px;
+            text-align: center;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+            transform: scale(0.9); /* Adjust the scale factor as needed */
+        }
+
     </style>
 </head>
 <body>
@@ -93,9 +126,12 @@
         </p>
     </form>
 
-        <div class="button-container">
-            <button class="button" onclick="window.location.href='{% url 'homepage' %}'">Home</button>
-            <button class="button" onclick="window.location.href='{% url 'querypostservice' %}'">Query Service <b>(admin only!!)</b></button>
+    <div class="navbar">
+            <div>
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'querypostservice' %}">My Post</a>
+                <a href="{% url 'deletepostservice' %}">Delete Post</a>
+            </div>
         </div>
 </body>
 </html>

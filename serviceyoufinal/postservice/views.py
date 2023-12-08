@@ -26,15 +26,31 @@ class HomePageView(View):
     # loginRedirect = 'login'
 
     def get(self, request):
-        return render(request, self.template)
+        # Retrieve user_id from the session
+        user_id = request.session.get('user_id')
 
-    # def register(self, request):
-    #     # Redirect to the 'register.html' page
-    #     return HttpResponseRedirect(reverse('registerpage'))
+        # Now you can use user_id in your view logic
+        if user_id:
+            # Retrieve the user object using the user_id
+            user = Worker.objects.get(pk=user_id)
 
-    # def login(self, request):
-    #     # Redirect to the 'login.html' page
-    #     return HttpResponseRedirect(reverse('login'))
+            # Pass the username to the template
+            username = user.username if user else None
+
+            cursor = connection.cursor()
+            query = (
+                'SELECT COUNT(*) FROM account_postservice WHERE '
+                'workerID_id = %s AND is_active = 1'
+            )
+            cursor.execute(query, [user_id])
+            transaction_count = cursor.fetchone()[0]
+            cursor.close()
+
+            # Render the template with the username
+            return render(request, self.template, {'username': username, 'transaction_count': transaction_count})
+        else:
+            # User is not logged in, handle accordingly
+            return render(request, self.template, {'username': None})
 
 
 class PostServiceWorker(View):
@@ -42,11 +58,18 @@ class PostServiceWorker(View):
 
     def get(self, request):
         postService = PostServiceForm()
+        user_id = request.session.get('user_id')
+        user = Worker.objects.get(pk=user_id)
+        post_worker_id = user.workerID
+        print(post_worker_id)
         return render(request, self.template, {'form': postService})
 
     def post(self, request):
         postServiceForm = PostServiceForm(request.POST)
-
+        user_id = request.session.get('user_id')
+        user = Worker.objects.get(pk=user_id)
+        post_worker_id = user.workerID
+        print(post_worker_id)
         if postServiceForm.is_valid():
             # Assuming you have a model named PostService
             postService = postServiceForm.save(commit=False)
@@ -54,7 +77,7 @@ class PostServiceWorker(View):
             # Execute the stored procedure
             with connection.cursor() as cursor:
                 cursor.callproc('insertPostService',
-                                [postService.workerID, postService.serviceID, postService.title,
+                                [post_worker_id, postService.serviceID, postService.title,
                                  postService.description, postService.location, postService.date_posted,
                                  1, 0])
 
@@ -69,9 +92,10 @@ class QueryPostServiceView(View):
     def get(self, request):
         # with connection.cursor() as cursor:
         # cursor.callproc('queryPostService', [1])  # Assuming 1 is a sample workerID parameter
+        user_id = request.session.get('user_id')
         cursor = connection.cursor()
-        query = 'SELECT title, description, location, workerID_id, serviceID_id FROM account_postservice'
-        cursor.execute(query)
+        query = 'SELECT postID, title, description, location, workerID_id, serviceID_id FROM account_postservice WHERE workerID_id = %s AND is_active = 1'
+        cursor.execute(query, [user_id])
         postServices = cursor.fetchall()
         cursor.close()
         print(postServices)
@@ -91,7 +115,7 @@ class DeletePostService(View):
 
         with connection.cursor() as cursor:
             # Call the stored procedure
-            cursor.callproc('deletePostServiceByPostID', [post_id, None])
+            cursor.callproc('softDeletePostServiceByPostID', [post_id, None])
             cursor.execute("SELECT @p_isDeleted")
             is_deleted = cursor.fetchone()[0]
 
