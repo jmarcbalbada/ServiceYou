@@ -35,7 +35,7 @@ class HomePageView(View):
             user = Worker.objects.get(pk=user_id)
 
             # Pass the username to the template
-            username = user.username if user else None
+            firstname = user.firstName if user else None
 
             cursor = connection.cursor()
             query = (
@@ -47,7 +47,7 @@ class HomePageView(View):
             cursor.close()
 
             # Render the template with the username
-            return render(request, self.template, {'username': username, 'transaction_count': transaction_count})
+            return render(request, self.template, {'firstname': firstname, 'transaction_count': transaction_count})
         else:
             # User is not logged in, handle accordingly
             return render(request, self.template, {'username': None})
