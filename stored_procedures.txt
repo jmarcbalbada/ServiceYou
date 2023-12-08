@@ -136,3 +136,43 @@ DELIMITER ;
 
 --servicerequest--
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateServiceRequest`(IN `p_clientID` INT, IN `p_workerID` INT, IN `p_serviceID` INT, IN `p_requestDate` DATE, IN `p_status` VARCHAR(10), IN `p_dateAccepted` DATE, IN `p_dateFinished` DATE)
+BEGIN
+
+    IF p_dateAccepted = '' THEN
+        SET p_dateAccepted = NULL;
+    END IF;
+
+    IF p_dateFinished = '' THEN
+        SET p_dateFinished = NULL;
+    END IF;
+
+    INSERT INTO account_servicerequest (clientID_id, workerID_id, serviceID_id, requestDate, status, dateAccepted, dateFinished)
+    VALUES (p_clientID, p_workerID, p_serviceID, p_requestDate, p_status, p_dateAccepted, p_dateFinished);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteServiceRequest`(IN `request_id` INT)
+BEGIN
+    DELETE FROM account_servicerequest WHERE requestID = request_id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetServiceRequest`(IN `request_id` INT)
+BEGIN
+    SELECT * FROM account_servicerequest WHERE requestID = request_id;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateServiceRequest`(IN `request_id` INT, IN `new_status` VARCHAR(10), IN `new_date_accepted` DATE, IN `new_date_finished` DATE)
+BEGIN
+    UPDATE account_servicerequest
+    SET status = new_status, dateAccepted = new_date_accepted, dateFinished = new_date_finished
+    WHERE requestID = request_id;
+END$$
+DELIMITER ;
