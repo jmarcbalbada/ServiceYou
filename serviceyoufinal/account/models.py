@@ -19,6 +19,15 @@ class Client(models.Model):
     def __str__(self):
         return str(self.clientID)
 
+    @classmethod
+    def authenticate_client(cls, username, password):
+        # Your authentication logic for the Client model
+        try:
+            user = cls.objects.get(username=username, password=password)
+            return user
+        except cls.DoesNotExist:
+            return None
+
 
 class Worker(models.Model):
     workerID = models.AutoField(primary_key=True)
@@ -32,6 +41,15 @@ class Worker(models.Model):
 
     def __str__(self):
         return str(self.workerID)
+
+    @classmethod
+    def authenticate_worker(cls, username, password):
+        # Your authentication logic for the Worker model
+        try:
+            user = cls.objects.get(username=username, password=password)
+            return user
+        except cls.DoesNotExist:
+            return None
 
 
 class Service(models.Model):

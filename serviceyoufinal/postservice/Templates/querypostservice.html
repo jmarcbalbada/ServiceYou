@@ -52,7 +52,7 @@
             background-color: #fff;
             padding: 20px;
             margin-top: -550px;
-            margin-left: 150px;
+            margin-left: 50px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             display: inline-block;
@@ -66,26 +66,94 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 0 10px;
+            font-weight:bold;
         }
 
-        td:nth-child(4),
-        td:nth-child(5){
+        td:nth-child(1),
+        td:nth-child(5),
+        td:nth-child(6){
         text-align: center;
         }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0; /* Adjust the padding as needed */
+            z-index: 1000; /* Ensure the navbar appears above other elements */
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 150%;
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0; /* Adjust the padding as needed */
+            margin-left: -200px;
+            z-index: 1000; /* Ensure the navbar appears above other elements */
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 16px;
+            text-align: center;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+            transform: scale(0.9); /* Adjust the scale factor as needed */
+        }
+
+        .title{
+            padding-top: 130px;
+            font-size: 24px;
+            color: #000000
+        }
+
+        .mytable{
+            padding-top: 0px;
+            margin-top: -120px;
+            margin-left: -280px;
+        }
+
+
     </style>
 </head>
 <body>
-    <h1>Query Post Services</h1>
+
+<div class="navbar">
+        <div>
+            <a href="{% url 'homepage' %}">Home</a>
+            <a href="{% url 'posting' %}">Post Service</a>
+            <a href="{% url 'deletepostservice' %}">Delete Post</a>
+        </div>
+    </div>
+    <h1 class="title">My Post Services</h1>
     {% if postServices %}
-        <table>
+        <table class="mytable">
             <thead>
                 <tr>
+                    <th>Post ID</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>Location</th>
                     <th>Worker ID</th>
                     <th>Service ID</th>
-                    <!-- Add more headers as needed -->
                 </tr>
             </thead>
             <tbody>
@@ -96,7 +164,7 @@
                         <td>{{ row.2 }}</td>
                         <td>{{ row.3 }}</td>
                         <td>{{ row.4 }}</td>
-                        <!-- Add more columns as needed -->
+                        <td>{{ row.5 }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -104,10 +172,5 @@
     {% else %}
         <p>No post services found.</p>
     {% endif %}
-
-    <div class="button-container">
-            <button class="button" onclick="window.location.href='{% url 'homepage' %}'">Home</button>
-            <button class="button" onclick="window.location.href='{% url 'posting' %}'">Post Service</button>
-        </div>
 </body>
 </html>
