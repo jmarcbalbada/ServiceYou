@@ -22,5 +22,6 @@ urlpatterns = [
     path('postservice/', include('postservice.urls')),
     path('servicerequest/', include('servicerequest.urls')),
     path('rateservice/', include('rateservice.urls')),
+    path('payrequest/', include('payrequest.urls')),
     path('', include('account.urls')),
 ]
