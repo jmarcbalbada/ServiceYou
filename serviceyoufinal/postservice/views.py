@@ -80,7 +80,6 @@ class QueryPostServiceView(View):
         return render(request, self.template_name, context)
 
 
-
 # class RegisterWorker(View):
 #     template = 'register.html'
 #     nextPageTemplate = 'login.html'

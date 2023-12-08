@@ -10,14 +10,12 @@
 --postservice--
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deletePostServiceByPostID`(
-    IN p_postID INT,
-    OUT p_isDeleted BOOLEAN
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `softDeletePostServiceByPostID`(IN `p_postID` INT, OUT `p_isDeleted` BOOLEAN)
 BEGIN
     DECLARE isDeleted BOOLEAN DEFAULT FALSE;
 
-    DELETE FROM account_postservice
+    UPDATE account_postservice
+    SET is_active = 0
     WHERE postID = p_postID;
 
     -- Check if the deletion was successful
