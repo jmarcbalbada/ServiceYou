@@ -15,12 +15,46 @@
             height: 100vh;
         }
 
-        .container {
-            text-align: center;
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0; /* Adjust the padding as needed */
         }
 
-        h1 {
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 16px;
             text-align: center;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+            transform: scale(0.9); /* Adjust the scale factor as needed */
+        }
+
+        h1.welcome {
+            color: #000000;
+            margin: 0;
+            padding-right: 20px;
+            margin-top: -200px;
+            margin-bottom: 80px;
+            font-size: 24px;
+        }
+
+        h1.postServiceHeader{
+            font-size: 72px;
             color: #007bff;
         }
 
@@ -45,16 +79,30 @@
         .button:hover {
             background-color: #0056b3;
         }
+
+        h2 {
+            font-weight: normal;
+        }
+
+        .normal-text {
+            font-weight: normal;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Homepage</h1>
-        <div class="button-container">
-            <button class="button" onclick="window.location.href='{% url 'posting' %}'">Post Service</button>
-            <button class="button" onclick="window.location.href='{% url 'querypostservice' %}'">Query Post Service <b>(admin only)</b></button>
-            <button class="button" onclick="window.location.href='{% url 'deletepostservice' %}'">Delete</button>
+    <div class="navbar">
+        <div>
+            <a href="{% url 'posting' %}">Post Service</a>
+            <a href="{% url 'querypostservice' %}">My Post</a>
+            <a href="{% url 'deletepostservice' %}">Delete Post</a>
         </div>
+    </div>
+
+    <div class="container">
+        <h1 class="welcome">Welcome, {{ username }}! </h1>
+        <h1 class="postServiceHeader">Post service now!</h1>
+        <h2 style="font-weight: normal;">You currently have <b style="color: #007bff;">{{ transaction_count }}</b> transactions as of now.</h2>
     </div>
 </body>
 </html>
