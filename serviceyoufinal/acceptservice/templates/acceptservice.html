@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accept Service</title>
+    <style>
+        .box {
+            display: flex;
+            justify-content: center;
+            margin: 5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <div class="box">
+            Accept Service Request
+        </div>
+    </h1>
+    {% for service in services %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="box">
+                <div>
+                    <p>Request Date: {{ service.1 }}</p>
+                    <p>Status: {{ service.2 }}</p>
+                    <p>Date Accepted: {{ service.3 }}</p>
+                    <p>Date Finished: {{ service.4 }}</p>
+                    <p>Client ID: {{ service.5 }}</p>
+                    <p>Service ID: {{ service.6 }}</p>
+                    <p>Worker ID: {{ service.7 }}</p>
+                    <button type="submit">
+                        Accept Service Request
+                        <input type="hidden" name="requestid" value="{{ service.0 }}">
+                    </button>
+                </div>
+                <!-- Add more details as needed -->
+            </div>
+        </form>
+    {% endfor %}
+</body>
+</html>

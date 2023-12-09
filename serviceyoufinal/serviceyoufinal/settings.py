@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'payrequest',
     'postservice',
     'rateservice',
-    'servicerequest'
+    'servicerequest',
+    'acceptservice'
 ]
 
 MIDDLEWARE = [
