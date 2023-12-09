@@ -1,0 +1,212 @@
+-- PLACE YOUR STORED PROCEDURE AND VIEWS HERE --
+
+
+--account--
+
+
+--payrequest--
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertPayment`(IN `p_request_id` INT, IN `p_client_id` INT, IN `p_worker_id` INT, IN `p_amount` DOUBLE, IN `p_payment_date` DATE, IN `p_amount_paid` DOUBLE, OUT `p_success` INT)
+BEGIN
+    DECLARE v_balance DOUBLE;
+
+    -- Insert into account_payment table
+    INSERT INTO account_payment (amount,paymentDate, amountPaid,requestID_id, clientID_id, workerID_id, amountDue, status)
+    VALUES ( p_amount, p_payment_date, p_amount_paid, p_request_id, p_client_id, p_worker_id, 0.0, 'Ongoing');
+
+    -- Calculate balance (amount - amount_paid)
+    SELECT (p_amount - p_amount_paid) INTO v_balance;
+
+    -- Update amountDue in the inserted record
+    UPDATE account_payment
+    SET amountDue = v_balance
+    WHERE requestID_id = p_request_id AND clientID_id = p_client_id AND workerID_id = p_worker_id;
+
+    -- Check if total amount_paid equals the amount, then set status to Completed
+    UPDATE account_payment p
+    SET p.status = 'Completed'
+    WHERE p.requestID_id = p_request_id AND p.clientID_id = p_client_id AND p.workerID_id = p_worker_id
+        AND p.amountDue = 0.0
+        AND (SELECT SUM(amountPaid) FROM account_payment WHERE requestID_id = p_request_id AND clientID_id = p_client_id AND workerID_id = p_worker_id) >= p.amount;
+
+    -- Set the success status
+    SET p_success = 1; -- 1 indicates success
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeletePayment`(IN p_paymentID INT)
+BEGIN
+    DELETE FROM account_payment WHERE paymentID = p_paymentID;
+END$$
+DELIMITER ;
+
+--postservice--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `softDeletePostServiceByPostID`(IN `p_postID` INT, OUT `p_isDeleted` BOOLEAN)
+BEGIN
+    DECLARE isDeleted BOOLEAN DEFAULT FALSE;
+
+    UPDATE account_postservice
+    SET is_active = 0
+    WHERE postID = p_postID;
+
+    -- Check if the deletion was successful
+    SELECT ROW_COUNT() > 0 INTO isDeleted;
+
+    SET p_isDeleted = isDeleted;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertPostService`(IN `p_workerID` INT, IN `p_serviceID` INT, IN `p_title` VARCHAR(100), IN `p_description` TEXT, IN `p_location` VARCHAR(255), IN `p_date_posted` DATETIME, IN `p_is_active` BOOLEAN, OUT `p_isAdded` BOOLEAN)
+BEGIN
+    DECLARE isAdded BOOLEAN DEFAULT FALSE;
+
+    INSERT INTO account_postservice (workerID_id, serviceID_id, title, description, location, date_posted, is_active)
+    VALUES (p_workerID, p_serviceID, p_title, p_description, p_location, p_date_posted, p_is_active);
+
+    -- Check if the insertion was successful
+    SELECT ROW_COUNT() > 0 INTO isAdded;
+
+    SET p_isAdded = isAdded;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queryPostService`(IN `p_workerID` INT)
+BEGIN
+    SELECT postID AS 'Post ID',
+    serviceID_id AS 'Service ID',
+    workerID_id AS 'Worker ID',
+    date_posted AS 'Date Posted',
+    description AS 'Description',
+    is_active AS 'Active',
+    location AS 'Location',
+    title AS 'Title'
+    FROM account_postservice
+    WHERE workerID_id = p_workerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updatePostServiceTitle`(
+    IN p_postID INT,
+    IN p_title VARCHAR(100),
+    OUT p_isUpdated BOOLEAN
+)
+BEGIN
+    DECLARE isUpdated BOOLEAN DEFAULT FALSE;
+
+    UPDATE account_postservice
+    SET title = p_title
+    WHERE postID = p_postID;
+
+    -- Check if the update was successful
+    SELECT ROW_COUNT() > 0 INTO isUpdated;
+
+    SET p_isUpdated = isUpdated;
+END$$
+DELIMITER ;
+
+
+--rateservice--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckIfRatingExists`(IN `p_requestID` INT, OUT `p_ratingExists` BOOLEAN)
+BEGIN
+    SELECT COUNT(*) INTO p_ratingExists
+    FROM account_rateservice
+    WHERE requestID_id = p_requestID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckRequestStatus`(IN p_requestID INT, OUT p_isDone BOOLEAN)
+BEGIN
+    DECLARE status_val VARCHAR(20);
+
+    SELECT status INTO status_val
+    FROM account_servicerequest
+    WHERE requestID = p_requestID;
+
+    IF status_val IN ('Completed', 'Cancelled') THEN
+        SET p_isDone = TRUE;
+    ELSE
+        SET p_isDone = FALSE;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RateService`(IN `p_requestID` INT, IN `p_rating` INT, IN `p_comment` TEXT)
+BEGIN
+    DECLARE isDone BOOLEAN;
+    DECLARE ratingExists BOOLEAN;
+
+    CALL CheckRequestStatus(p_requestID, isDone);
+    CALL CheckIfRatingExists(p_requestID, ratingExists);
+
+    IF isDone THEN
+        SET p_rating = CASE
+            WHEN p_rating > 5 THEN 5
+            WHEN p_rating < 1 THEN 1
+            ELSE p_rating
+        END;
+
+        IF NOT ratingExists THEN
+            INSERT INTO account_rateservice (rateValue, comment, requestID_id)
+            VALUES (p_rating, p_comment, p_requestID);
+        ELSE
+            SELECT 'Error: Rating already exists for this request.' AS errorMessage;
+        END IF;
+    ELSE
+        SELECT 'Error: Request not completed or cancelled.' AS errorMessage;
+    END IF;
+END$$
+DELIMITER ;
+
+
+--servicerequest--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateServiceRequest`(IN `p_clientID` INT, IN `p_workerID` INT, IN `p_serviceID` INT, IN `p_requestDate` DATE, IN `p_status` VARCHAR(10), IN `p_dateAccepted` DATE, IN `p_dateFinished` DATE)
+BEGIN
+
+    IF p_dateAccepted = '' THEN
+        SET p_dateAccepted = NULL;
+    END IF;
+
+    IF p_dateFinished = '' THEN
+        SET p_dateFinished = NULL;
+    END IF;
+
+    INSERT INTO account_servicerequest (clientID_id, workerID_id, serviceID_id, requestDate, status, dateAccepted, dateFinished)
+    VALUES (p_clientID, p_workerID, p_serviceID, p_requestDate, p_status, p_dateAccepted, p_dateFinished);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteServiceRequest`(IN `request_id` INT)
+BEGIN
+    DELETE FROM account_servicerequest WHERE requestID = request_id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetServiceRequest`(IN `request_id` INT)
+BEGIN
+    SELECT * FROM account_servicerequest WHERE requestID = request_id;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateServiceRequest`(IN `request_id` INT, IN `new_status` VARCHAR(10), IN `new_date_accepted` DATE, IN `new_date_finished` DATE)
+BEGIN
+    UPDATE account_servicerequest
+    SET status = new_status, dateAccepted = new_date_accepted, dateFinished = new_date_finished
+    WHERE requestID = request_id;
+END$$
+DELIMITER ;

@@ -23,5 +23,6 @@ urlpatterns = [
     path('servicerequest/', include('servicerequest.urls')),
     path('acceptservice/', include('acceptservice.urls')),
     path('rateservice/', include('rateservice.urls')),
+    path('payrequest/', include('payrequest.urls')),
     path('', include('account.urls')),
 ]

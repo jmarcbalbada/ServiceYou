@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Post your Service</title>
+    <title>Delete PostService</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,11 +20,8 @@
             background-color: #fff;
             padding: 30px;
             border-radius: 5px;
-            margin-top: 20px;
-            margin-bottom: -50px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             width: 400px;
-            height: 520px;
         }
 
         h1 {
@@ -32,13 +29,7 @@
             color: #007bff;
         }
 
-        form p {
-            margin: 10px 0;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        textarea {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px -10px;
@@ -47,7 +38,7 @@
         }
 
         input[type="submit"] {
-            background-color: #007bff;
+            background-color: #ff0000;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -56,16 +47,12 @@
         }
 
         input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #cc0000;
         }
 
         .messages {
             list-style: none;
             padding: 0;
-        }
-
-        .success {
-            color: #007bff;
         }
 
         .error {
@@ -76,7 +63,7 @@
             background-color: #fff;
             padding: 20px;
             margin-left: 100px;
-            margin-top: -550px;
+            margin-top: 0px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             display: inline-block;
@@ -123,35 +110,28 @@
             background-color: #0056b3;
             transform: scale(0.9); /* Adjust the scale factor as needed */
         }
+
     </style>
 </head>
 <body>
-<div class="navbar">
-        <div>
-            <a href="{% url 'homepage' %}">Home</a>
-            <a href="{% url 'querypostservice' %}">My Post</a>
-            <a href="{% url 'deletepostservice' %}">Delete Post</a>
-        </div>
-    </div>
     <form method="post" action="">
         {% csrf_token %}
-        <h1>Post your Service Here!</h1>
+        <h1>Delete PostService</h1>
         <p>
-            <label>Title:</label> {{ form.title }}
+            <label for="id_postID">Enter Post ID:</label>
+            <input type="text" id="id_postID" name="postID" required>
         </p>
         <p>
-            <label>Description:</label> {{ form.description }}
-        </p>
-        <p>
-            <label>Location:</label> {{ form.location }}
-        </p>
-        <p>
-            <label>Service ID:</label> {{ form.serviceID }}
-        </p>
-        <p>
-            <input type="submit" value="Submit!">
+            <input type="submit" value="Delete">
         </p>
     </form>
 
+    <div class="navbar">
+            <div>
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'querypostservice' %}">My Post</a>
+                <a href="{% url 'deletepostservice' %}">Delete Post</a>
+            </div>
+        </div>
 </body>
 </html>

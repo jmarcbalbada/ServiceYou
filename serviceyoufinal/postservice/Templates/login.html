@@ -1,120 +1,120 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        form-container {
-            text-align: center;
-        }
-
-        h1 {
-            text-align: center;
-            color: #007bff;
-        }
-
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
-        }
-
-        form p {
-            margin: 10px 0;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px -10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        input[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        .messages {
-            list-style: none;
-            padding: 0;
-        }
-
-        .success {
-            color: #007bff;
-        }
-
-        .error {
-            color: #ff0000;
-        }
-    </style>
-</head>
-<body>
-    <div>
-    <h1>Login</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="Login"></p>
-    </form>
-</div>
-
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-</body>
-</html>
-
-
-
 <!--<!DOCTYPE html>-->
 <!--<html lang="en">-->
 <!--<head>-->
 <!--    <meta charset="UTF-8">-->
 <!--    <title>Login</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            background-color: #f0f0f0;-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--        }-->
+
+<!--        form-container {-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        h1 {-->
+<!--            text-align: center;-->
+<!--            color: #007bff;-->
+<!--        }-->
+
+<!--        form {-->
+<!--            background-color: #fff;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 5px;-->
+<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);-->
+<!--            width: 300px;-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        form p {-->
+<!--            margin: 10px 0;-->
+<!--        }-->
+
+<!--        input[type="text"],-->
+<!--        input[type="password"] {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            margin: 10px -10px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+
+<!--        input[type="submit"] {-->
+<!--            background-color: #007bff;-->
+<!--            color: #fff;-->
+<!--            border: none;-->
+<!--            padding: 10px 20px;-->
+<!--            border-radius: 5px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        input[type="submit"]:hover {-->
+<!--            background-color: #0056b3;-->
+<!--        }-->
+
+<!--        .messages {-->
+<!--            list-style: none;-->
+<!--            padding: 0;-->
+<!--        }-->
+
+<!--        .success {-->
+<!--            color: #007bff;-->
+<!--        }-->
+
+<!--        .error {-->
+<!--            color: #ff0000;-->
+<!--        }-->
+<!--    </style>-->
 <!--</head>-->
 <!--<body>-->
+<!--    <div>-->
 <!--    <h1>Login</h1>-->
 <!--    <form method="post">-->
 <!--        {% csrf_token %}-->
 <!--        {{ form.as_p }}-->
-<!--        <input type="submit" value="Login">-->
+<!--        <p><input type="submit" value="Login"></p>-->
 <!--    </form>-->
+<!--</div>-->
 
 <!--    {% if messages %}-->
 <!--        <ul class="messages">-->
 <!--            {% for message in messages %}-->
-<!--                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>-->
+<!--                <li class="{{ message.tags }}">{{ message }}</li>-->
 <!--            {% endfor %}-->
 <!--        </ul>-->
 <!--    {% endif %}-->
 <!--</body>-->
 <!--</html>-->
+
+
+
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html lang="en">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Login</title>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;    <h1>Login</h1>&ndash;&gt;-->
+<!--&lt;!&ndash;    <form method="post">&ndash;&gt;-->
+<!--&lt;!&ndash;        {% csrf_token %}&ndash;&gt;-->
+<!--&lt;!&ndash;        {{ form.as_p }}&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="submit" value="Login">&ndash;&gt;-->
+<!--&lt;!&ndash;    </form>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if messages %}&ndash;&gt;-->
+<!--&lt;!&ndash;        <ul class="messages">&ndash;&gt;-->
+<!--&lt;!&ndash;            {% for message in messages %}&ndash;&gt;-->
+<!--&lt;!&ndash;                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;            {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;        </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
