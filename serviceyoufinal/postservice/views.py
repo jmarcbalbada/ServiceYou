@@ -108,7 +108,12 @@ class DeletePostService(View):
     template = 'deletepostservice.html'
 
     def get(self,request):
-        return render(request, self.template)
+        user_id = request.session.get('user_id')
+        # Using Django ORM to fetch post services
+        post_services = PostService.objects.filter(workerID_id=user_id, is_active=1).values('postID', 'title')
+
+        context = {'postServices': post_services}
+        return render(request, self.template, context)
 
     def post(self, request):
         post_id = request.POST.get('postID')
@@ -123,6 +128,19 @@ class DeletePostService(View):
             messages.success(request, f"PostService with ID {post_id} deleted successfully.")
         else:
             messages.error(request, f"Failed to delete PostService with ID {post_id}.")
+
+        return redirect('querypostservice')
+
+        # with connection.cursor() as cursor:
+        #     # Call the stored procedure
+        #     cursor.callproc('softDeletePostServiceByPostID', [post_id, None])
+        #     cursor.execute("SELECT @p_isDeleted")
+        #     is_deleted = cursor.fetchone()[0]
+        #
+        # if is_deleted:
+        #     messages.success(request, f"PostService with ID {post_id} deleted successfully.")
+        # else:
+        #     messages.error(request, f"Failed to delete PostService with ID {post_id}.")
 
         return redirect('querypostservice')
 

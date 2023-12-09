@@ -115,16 +115,20 @@
 </head>
 <body>
     <form method="post" action="">
-        {% csrf_token %}
-        <h1>Delete PostService</h1>
-        <p>
-            <label for="id_postID">Enter Post ID:</label>
-            <input type="text" id="id_postID" name="postID" required>
-        </p>
-        <p>
-            <input type="submit" value="Delete">
-        </p>
-    </form>
+    {% csrf_token %}
+    <h1>Delete PostService</h1>
+    <p>
+        <label for="id_postID">Select Post to Delete:</label>
+        <select id="id_postID" name="postID" required>
+            {% for post_service in postServices %}
+                <option value="{{ post_service.postID }}">{{ post_service.postID }} - {{ post_service.title }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <input type="submit" value="Delete">
+    </p>
+</form>
 
     <div class="navbar">
             <div>
