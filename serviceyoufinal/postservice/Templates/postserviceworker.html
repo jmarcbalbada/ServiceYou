@@ -96,15 +96,13 @@
         .navbar {
             position: fixed;
             top: 0;
-            width: 150%;
+            width: 100%;
             background-color: #007bff;
             overflow: hidden;
             display: flex;
-            justify-content: center;
+            justify-content: space-between; /* Updated to create space between links */
             align-items: center;
-            padding: 10px 0; /* Adjust the padding as needed */
-            margin-left: 0px;
-            z-index: 1000; /* Ensure the navbar appears above other elements */
+            padding: 10px 20px; /* Adjusted padding for better spacing */
         }
 
         .navbar a {
@@ -131,6 +129,9 @@
             <a href="{% url 'homepage' %}">Home</a>
             <a href="{% url 'querypostservice' %}">My Post</a>
             <a href="{% url 'deletepostservice' %}">Delete Post</a>
+        </div>
+        <div>
+            <a href="{% url 'landingpage' %}">Logout</a>
         </div>
     </div>
     <form method="post" action="">
