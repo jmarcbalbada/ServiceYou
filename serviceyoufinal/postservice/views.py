@@ -22,6 +22,7 @@ def homePage(request):
 
 class HomePageView(View):
     template = 'home.html'
+
     # registerRedirect = 'registerpage'
     # loginRedirect = 'login'
 
@@ -107,8 +108,13 @@ class QueryPostServiceView(View):
 class DeletePostService(View):
     template = 'deletepostservice.html'
 
-    def get(self,request):
-        return render(request, self.template)
+    def get(self, request):
+        user_id = request.session.get('user_id')
+        # Using Django ORM to fetch post services
+        post_services = PostService.objects.filter(workerID_id=user_id, is_active=1).values('postID', 'title')
+
+        context = {'postServices': post_services}
+        return render(request, self.template, context)
 
     def post(self, request):
         post_id = request.POST.get('postID')
@@ -125,6 +131,81 @@ class DeletePostService(View):
             messages.error(request, f"Failed to delete PostService with ID {post_id}.")
 
         return redirect('querypostservice')
+
+        # with connection.cursor() as cursor:
+        #     # Call the stored procedure
+        #     cursor.callproc('softDeletePostServiceByPostID', [post_id, None])
+        #     cursor.execute("SELECT @p_isDeleted")
+        #     is_deleted = cursor.fetchone()[0]
+        #
+        # if is_deleted:
+        #     messages.success(request, f"PostService with ID {post_id} deleted successfully.")
+        # else:
+        #     messages.error(request, f"Failed to delete PostService with ID {post_id}.")
+
+        # return redirect('querypostservice')
+
+
+class UpdatePostService(View):
+    template = 'updatepostservice.html'
+
+    def get(self, request, *args, **kwargs):
+        post_id = kwargs.get('postID')
+
+        # Retrieve post details from the database
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT postID, title, description, location, serviceID_id FROM account_postservice WHERE postID = %s',
+                [post_id]
+            )
+            post_details = cursor.fetchone()
+
+        # Check if the post with the specified postID exists
+        if not post_details:
+            return HttpResponseNotFound("Post not found")
+
+        # Create a form with initial data from the post details
+        form = PostServiceForm(initial={
+            'postID': post_details[0],
+            'title': post_details[1],
+            'description': post_details[2],
+            'location': post_details[3],
+            'serviceID': post_details[4],
+        })
+
+        return render(request, self.template, {'form': form, 'postID': post_id})
+
+    def post(self, request, *args, **kwargs):
+        # Access the postID parameter
+        post_id = kwargs.get('postID')
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT postID, title, description, location, serviceID_id FROM account_postservice WHERE postID = %s',
+                [post_id]
+            )
+            post_details = cursor.fetchone()
+
+        if not post_details:
+            return HttpResponseNotFound("Post not found")
+
+        # Create a form instance and populate it with data from the request
+        form = PostServiceForm(request.POST)
+
+        # Validate the form
+        if form.is_valid():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    'UPDATE account_postservice SET title = %s, description = %s, location = %s, serviceID_id = %s '
+                    'WHERE postID = %s',
+                    [form.cleaned_data['title'], form.cleaned_data['description'], form.cleaned_data['location'], form.cleaned_data['serviceID'],
+                     post_id]
+                )
+
+            return redirect('querypostservice')
+        else:
+            return render(request, self.template, {'form': form, 'postID': post_id})
+
 
 # class RegisterWorker(View):
 #     template = 'register.html'

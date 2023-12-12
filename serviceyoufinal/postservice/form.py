@@ -6,4 +6,6 @@ from .models import PostService
 class PostServiceForm(forms.ModelForm):
     class Meta:
         model = PostService
-        fields = ['serviceID', 'title', 'description', 'location']
+        fields = ['title', 'description', 'location', 'serviceID']
+
+

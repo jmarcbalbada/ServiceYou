@@ -8,7 +8,6 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
-            margin-left: 250px;
             padding: 0;
             display: flex;
             justify-content: center;
@@ -69,6 +68,23 @@
             font-weight:bold;
         }
 
+        .update-button {
+            background-color: #00A36C;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .update-button:hover {
+            background-color: #017B52;
+            transform: scale(0.9);
+        }
+
         td:nth-child(1),
         td:nth-child(5),
         td:nth-child(6){
@@ -82,24 +98,9 @@
             background-color: #007bff;
             overflow: hidden;
             display: flex;
-            justify-content: center;
+            justify-content: space-between; /* Updated to create space between links */
             align-items: center;
-            padding: 10px 0; /* Adjust the padding as needed */
-            z-index: 1000; /* Ensure the navbar appears above other elements */
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 150%;
-            background-color: #007bff;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0; /* Adjust the padding as needed */
-            margin-left: -200px;
-            z-index: 1000; /* Ensure the navbar appears above other elements */
+            padding: 10px 20px; /* Adjusted padding for better spacing */
         }
 
         .navbar a {
@@ -131,46 +132,52 @@
             margin-left: -280px;
         }
 
-
     </style>
 </head>
 <body>
 
 <div class="navbar">
-        <div>
-            <a href="{% url 'homepage' %}">Home</a>
-            <a href="{% url 'posting' %}">Post Service</a>
-            <a href="{% url 'deletepostservice' %}">Delete Post</a>
-        </div>
+    <div>
+        <a href="{% url 'homepage' %}">Home</a>
+        <a href="{% url 'posting' %}">Post Service</a>
+        <a href="{% url 'deletepostservice' %}">Delete Post</a>
     </div>
-    <h1 class="title">My Post Services</h1>
-    {% if postServices %}
-        <table class="mytable">
-            <thead>
-                <tr>
-                    <th>Post ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Location</th>
-                    <th>Worker ID</th>
-                    <th>Service ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in postServices %}
-                    <tr>
-                        <td>{{ row.0 }}</td>
-                        <td>{{ row.1 }}</td>
-                        <td>{{ row.2 }}</td>
-                        <td>{{ row.3 }}</td>
-                        <td>{{ row.4 }}</td>
-                        <td>{{ row.5 }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No post services found.</p>
-    {% endif %}
+    <div>
+        <a href="{% url 'landingpage' %}">Logout</a>
+    </div>
+</div>
+<h1 class="title">My Post Services</h1>
+{% if postServices %}
+    <table class="mytable">
+        <thead>
+        <tr>
+            <th>Post ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Worker ID</th>
+            <th>Service ID</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in postServices %}
+            <tr>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1 }}</td>
+                <td>{{ row.2 }}</td>
+                <td>{{ row.3 }}</td>
+                <td>{{ row.4 }}</td>
+                <td>{{ row.5 }}</td>
+                <td>
+                    <a class="update-button" href="{% url 'updatepostservice' postID=row.0 %}">Update</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You currently don't have any post.</p>
+{% endif %}
 </body>
 </html>
