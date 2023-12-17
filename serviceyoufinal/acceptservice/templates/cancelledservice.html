@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Accept Service</title>
+    <title>Cancelled Service</title>
     <style>
         .box {
             display: flex;
@@ -15,8 +15,7 @@
 <body>
     <h1>
         <div class="box">
-            {{status}}
-            Accept Service Request
+            Ongoing Task
         </div>
         <div class="box">
             {{result}}
@@ -35,12 +34,6 @@
                     <p>Service ID: {{ service.6 }}</p>
                     <p>Worker ID: {{ service.7 }}</p>
                     <input type="hidden" name="requestid" value="{{ service.0 }}">
-                    <button type="submit" name="status" value="cancelled">
-                        Cancel Service Request
-                    </button>
-                    <button type="submit" name="status" value="accepted">
-                        Accept Service Request
-                    </button>
                 </div>
                 <!-- Add more details as needed -->
             </div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Navigation Bar</title>
+</head>
+<style>
+  .box{
+    display: flex;
+    justify-content: space-around;
+      list-style: none;
+
+  }
+  .box a{
+      text-decoration: none;
+      color: white;
+  }
+  .box li{
+      background-color: #63c2ff;
+      border-radius: 1rem;
+      padding: 1rem;
+  }
+</style>
+<body>
+    <ul class="box">
+        <li><a href="{% url 'acceptservice' %}">Pending Service</a></li>
+        <li><a href="{% url 'pendingservice' %}">Ongoing Service</a></li>
+        <li><a href="{% url 'completedservice' %}">Completed Transaction</a></li>
+        <li><a href="{% url 'cancelledservice' %}">Cancelled ransaction</a></li>
+        <li><a href="{% url 'failedservice' %}">Failed Transaction</a></li>
+    </ul>
+</body>
+</html>
