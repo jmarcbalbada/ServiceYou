@@ -8,6 +8,7 @@ urlpatterns = [
     path('posting/', views.PostServiceWorker.as_view(), name='posting'),
     path('querypostservice/', views.QueryPostServiceView.as_view(), name='querypostservice'),
     path('deletepostservice/', views.DeletePostService.as_view(), name='deletepostservice'),
+    path('updatepostservice/<int:postID>/', views.UpdatePostService.as_view(), name='updatepostservice'),
     # path('httpregister/', views.registration, name='httpregister'),
 
 ]

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delete PostService</title>
+    <title>Update PostService</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,6 +22,7 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             width: 400px;
+            font-weight:bold;
         }
 
         h1 {
@@ -38,46 +39,17 @@
         }
 
         input[type="submit"] {
-            background-color: #ff0000;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #cc0000;
-        }
-
-        .messages {
-            list-style: none;
-            padding: 0;
-        }
-
-        .error {
-            color: #ff0000;
-        }
-
-        .button-container {
-            background-color: #fff;
-            padding: 20px;
-            margin-left: 100px;
-            margin-top: 0px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: inline-block;
-        }
-
-        .button {
             background-color: #007bff;
             color: #fff;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            margin: 0 10px;
             font-weight:bold;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
         }
 
         .navbar {
@@ -87,9 +59,10 @@
             background-color: #007bff;
             overflow: hidden;
             display: flex;
-            justify-content: space-between; /* Updated to create space between links */
+            justify-content: center;
             align-items: center;
-            padding: 10px 20px; /* Adjusted padding for better spacing */
+            padding: 10px 0;
+            z-index: 1000;
         }
 
         .navbar a {
@@ -106,38 +79,56 @@
 
         .navbar a:hover {
             background-color: #0056b3;
-            transform: scale(0.9); /* Adjust the scale factor as needed */
+            transform: scale(0.9);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px -10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: Arial, sans-serif; /* Set the font family explicitly */
         }
 
     </style>
 </head>
 <body>
-
     <form method="post" action="">
     {% csrf_token %}
-    <h1>Delete PostService</h1>
+    <h1>Update PostService</h1>
+    {% if form.errors %}
+        <div class="error">
+            <strong>Error:</strong> Please correct the form errors.
+        </div>
+    {% endif %}
     <p>
-        <label for="id_postID">Select Post to Delete:</label>
-        <select id="id_postID" name="postID" required>
-            {% for post_service in postServices %}
-                <option value="{{ post_service.postID }}">{{ post_service.postID }} - {{ post_service.title }}</option>
-            {% endfor %}
-        </select>
+        <label>Title:</label>
+        {{ form.title }}
+    </p>
+
+    <p>
+        <label>Description:</label>
+        {{ form.description }}
+    </p>
+
+    <p>
+        <label>Location:</label>
+        {{ form.location }}
     </p>
     <p>
-        <input type="submit" value="Delete">
+        <label>Service ID:</label>
+        {{ form.serviceID }}
     </p>
+    <input type="submit" value="Update">
 </form>
 
     <div class="navbar">
-            <div>
-                <a href="{% url 'homepage' %}">Home</a>
-                <a href="{% url 'posting' %}">Post Service</a>
-                <a href="{% url 'querypostservice' %}">My Post</a>
-            </div>
         <div>
-            <a href="{% url 'landingpage' %}">Logout</a>
+            <a href="{% url 'homepage' %}">Home</a>
+            <a href="{% url 'querypostservice' %}">My Post</a>
+            <a href="{% url 'deletepostservice' %}">Delete Post</a>
         </div>
-        </div>
+    </div>
 </body>
 </html>
