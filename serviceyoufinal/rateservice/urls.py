@@ -1,7 +1,9 @@
+# urls.py
 from django.urls import path
-from . import views
+from .views import EnterClientID, RateService
 
 urlpatterns = [
-    path('rating/', views.RateService.as_view(), name='rating'),
-    path('', views.rating, name='temp'),
+    path('', EnterClientID.as_view(), name='enter_client_id'),
+    path('rate-service/<int:client_id>/', RateService.as_view(), name='rate_service'),
+    # Add other URL patterns as needed
 ]

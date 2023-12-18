@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Rate your Service</title>
@@ -33,14 +33,22 @@
             margin: 10px 0;
         }
 
-        input[type="text"],
-        input[type="password"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px -10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .star {
+            cursor: pointer;
+            font-size: 24px;
+            color: #ccc;
+            transition: color 0.3s;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #f00; /* Highlighted color for active stars */
         }
 
         input[type="submit"] {
@@ -78,14 +86,42 @@
             <label>Request ID:</label> {{ form.requestID }}
         </p>
         <p>
-            <label>Rating out of 5:</label> {{ form.rateValue }}
+            <br><label>Rating:</label>
+            <div class="rating">
+                {% for i in "12345" %}
+                    <span class="star{% if i == form.rateValue.value %} active{% endif %}" data-value="{{ i }}">★</span>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="rateValue" id="rateValue" value="{{ form.rateValue.value }}">
         </p>
         <p>
-            <label>Comment:</label> {{ form.comment }}
+            <br><label>Comment:</label> {{ form.comment }}
         </p>
         <p>
             <input type="submit" value="Submit!">
         </p>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const stars = document.querySelectorAll(".star");
+                const rateValueInput = document.getElementById("rateValue");
+
+                stars.forEach((star) => {
+                    star.addEventListener("click", function () {
+                        const value = parseInt(this.getAttribute("data-value"));
+                        rateValueInput.value = value;
+
+                        stars.forEach((s) => {
+                            if (value >= parseInt(s.getAttribute("data-value"))) {
+                                s.classList.add("active");
+                            } else {
+                                s.classList.remove("active");
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
     </form>
 </body>
 </html>

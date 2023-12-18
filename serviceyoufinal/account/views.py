@@ -5,6 +5,10 @@ from django.views import View
 from django.urls import reverse
 from django.contrib import messages
 from .models import *
+# from ..servicerequest.forms import ServiceRequestForm
+# from ..rateservice.form import RateServiceForm
+# from ..payrequest.form import PayForm
+
 
 #
 # # Create your views here.
@@ -49,7 +53,52 @@ class LoginPageView(View):
         if client is not None:
             # Log in the client
             request.session['user_id'] = client.clientID
-            return redirect('home_client')  # Redirect to the client's home page
+            return redirect('client_dashboard')  # Redirect to the client's home page
 
         # Authentication failed, handle accordingly (e.g., display an error message)
         return render(request, self.template, {'error_message': 'Invalid credentials'})
+
+    # class ClientDashboardView(View):
+    #     template_name = 'client_dashboard.html'
+    #
+    #     def get(self, request):
+    #         # Your view logic for the client dashboard
+    #         return render(request, self.template_name)
+    #
+    # class ClientRequestServiceView(View):
+    #     template_name = 'servicerequest.html'
+    #
+    #     def get(self, request):
+    #         # Your view logic for client request service
+    #         from serviceyoufinal.servicerequest.forms import ServiceRequestForm
+    #         request_service = ServiceRequestForm()
+    #         return render(request, self.template_name, {'form': request_service})
+    #
+    #     def post(self, request):
+    #         # Your view logic for client request service form submission
+    #         pass
+    #
+    # class ClientPayServiceView(View):
+    #     template_name = 'payment.html'
+    #
+    #     def get(self, request):
+    #         from serviceyoufinal.payrequest.form import PayForm
+    #         pay_service = PayForm()
+    #         return render(request, self.template_name, {'form': pay_service})
+    #
+    #     def post(self, request):
+    #         # Your view logic for client pay service form submission
+    #         pass
+    #
+    # class ClientRateServiceView(View):
+    #     template_name = 'rating.html'
+    #
+    #     def get(self, request):
+    #         from serviceyoufinal.rateservice.form import RateServiceForm
+    #         rate_service = RateServiceForm()
+    #         return render(request, self.template_name, {'form': rate_service})
+    #
+    #     def post(self, request):
+    #         # Your view logic for client rate service form submission
+    #         pass
+

@@ -103,7 +103,7 @@ class RateService(models.Model):
     rateID = models.AutoField(primary_key=True)
     requestID = models.ForeignKey(ServiceRequest, on_delete=models.CASCADE)
     rateValue = models.IntegerField()
-    comment = models.CharField(max_length=500)
+    comment = models.TextField(max_length=500)
 
     def __str__(self):
         return str(self.rateID)
