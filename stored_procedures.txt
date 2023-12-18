@@ -12,11 +12,7 @@ BEGIN
 END;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptrequest`(
-    IN p_workerID INT,
-    IN p_requestID INT,
-    OUT p_result VARCHAR(255)
-)
+CREATE DEFINER=root@localhost PROCEDURE acceptrequest(IN p_workerID INT, IN p_requestID INT)
 BEGIN
     DECLARE dateAccepted_exists INT;
 
@@ -27,14 +23,14 @@ BEGIN
 
     IF dateAccepted_exists > 0 THEN
         -- If dateAccepted is already set, return 'fail'
-        SET p_result = 'fail';
+        SELECT 'fail' as RESULT;
     ELSE
         -- If dateAccepted is not set, update and return 'success'
         UPDATE account_servicerequest
         SET dateAccepted = CURRENT_DATE
         WHERE workerID_id = p_workerID AND requestID = p_requestID;
 
-        SET p_result = 'success';
+        SELECT 'success' as RESULT;
     END IF;
 END$$
 DELIMITER ;

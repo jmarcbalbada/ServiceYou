@@ -46,7 +46,7 @@ class RateService(View):
         # Check if there are no unrated service requests
         if not unrated_service_requests.exists():
             error_message = "No requests to be rated."
-            return render(request, 'rateservice.html', {'error_message': error_message})
+            return render(request, 'client_dashboard.html', {'error_message': error_message})
 
         # Create a list of tuples for the drop-down menu
         request_choices = [(request.requestID, str(request)) for request in unrated_service_requests]
@@ -67,7 +67,7 @@ class RateService(View):
                                                 rate_service.rateValue, rate_service.comment])
 
             # Redirect to the enter-client-id view on success
-            return HttpResponseRedirect(reverse('enter_client_id'))
+            return HttpResponseRedirect(reverse('client_dashboard'))
 
         # If the form is not valid, show an error popup
         return render(request, self.template_name,

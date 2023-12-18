@@ -81,7 +81,10 @@
         <div>
             <a href="{% url 'request_service' %}">Request</a>
             <a href="{% url 'pay_service' %}">Pay</a>
-            <a href="{% url 'rate_service' %}">Rate</a>
+            {% if user_id %}
+                <a href="{% url 'rate_service' user_id %}">Rate</a>
+            {% endif %}
+
         </div>
         <div>
             <a href="{% url 'landingpage' %}">Logout</a>
@@ -92,6 +95,9 @@
         <h1 class="welcome">Welcome, {{ firstname }}!</h1>
         <h1 class="clientDashboardHeader">Client Dashboard</h1>
         <h2 style="font-weight: normal;">You currently have <b style="color: #007bff;">{{ transaction_count }}</b> transactions as of now.</h2>
+        {% if not user_id %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
     </div>
 </body>
 </html>
