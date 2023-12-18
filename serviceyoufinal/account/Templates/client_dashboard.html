@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 16px;
+            text-align: center;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+            transform: scale(0.9);
+        }
+
+        h1.welcome {
+            color: #000000;
+            margin: 0;
+            padding-right: 20px;
+            margin-top: -200px;
+            margin-bottom: 80px;
+            font-size: 24px;
+        }
+
+        h1.clientDashboardHeader {
+            font-size: 72px;
+            color: #007bff;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        h2 {
+            font-weight: normal;
+        }
+
+        .normal-text {
+            font-weight: normal;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <a href="{% url 'request_service' %}">Request</a>
+            <a href="{% url 'pay_service' %}">Pay</a>
+            <a href="{% url 'rate_service' %}">Rate</a>
+        </div>
+        <div>
+            <a href="{% url 'landingpage' %}">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="welcome">Welcome, {{ firstname }}!</h1>
+        <h1 class="clientDashboardHeader">Client Dashboard</h1>
+        <h2 style="font-weight: normal;">You currently have <b style="color: #007bff;">{{ transaction_count }}</b> transactions as of now.</h2>
+    </div>
+</body>
+</html>
