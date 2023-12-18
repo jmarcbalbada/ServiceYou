@@ -43,10 +43,15 @@ class RateService(View):
             rateservice__isnull=True  # Assuming 'rateservice' is the related name in ServiceRequest
         )
 
+        user_id = client_id
+        if user_id:
+            user = Client.objects.get(pk=user_id)
+            firstname = user.firstName if user else None
+
         # Check if there are no unrated service requests
         if not unrated_service_requests.exists():
             error_message = "No requests to be rated."
-            return render(request, 'client_dashboard.html', {'error_message': error_message})
+            return render(request, 'client_dashboard.html', {'error_message': error_message, 'firstname': firstname})
 
         # Create a list of tuples for the drop-down menu
         request_choices = [(request.requestID, str(request)) for request in unrated_service_requests]
