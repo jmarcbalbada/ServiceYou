@@ -246,3 +246,103 @@ BEGIN
     WHERE requestID = request_id;
 END$$
 DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cancelledservice`(IN `p_workerID` INT)
+BEGIN
+    SELECT *
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND dateAccepted IS NULL AND dateFinished IS NULL AND status = 'Cancelled' ;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cancelledservice`(IN `p_workerID` INT)
+BEGIN
+    SELECT *
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND dateAccepted IS NULL AND dateFinished IS NULL AND status = 'Cancelled' ;
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cancelthetransaction`(IN `p_workerID` INT, IN `p_requestID` INT)
+BEGIN
+    DECLARE dateAccepted_exists INT;
+
+    -- Check if dateAccepted is already set
+    SELECT COUNT(*) INTO dateAccepted_exists
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND requestID = p_requestID;
+
+    IF dateAccepted_exists < 0 THEN
+        -- If status is already cancelled, return 'fail'
+        SELECT 'FAIL' AS RESULT ;
+    ELSE
+        -- If dateAccepted is not set, update and return 'success'
+        UPDATE account_servicerequest
+        SET status = 'Cancelled'
+        WHERE workerID_id = p_workerID AND requestID = p_requestID;
+
+        SELECT 'SUCCESS' AS RESULT ;
+    END IF;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `completedservice`(IN `p_workerID` INT)
+BEGIN
+    SELECT *
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND dateAccepted IS NOT NULL AND dateFinished IS NOT NULL ;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `markcomplete`(IN `p_workerID` INT, IN `p_requestID` INT)
+BEGIN
+    DECLARE dateAccepted_exists INT;
+
+    -- Check if dateAccepted is already set
+    SELECT COUNT(*) INTO dateAccepted_exists
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND requestID = p_requestID AND dateFinished IS NOT NULL;
+
+    IF dateAccepted_exists > 0 THEN
+        -- If dateAccepted is already set, return 'fail'
+        SELECT 'FAIL' AS RESULT ;
+    ELSE
+        -- If dateAccepted is not set, update and return 'success'
+        UPDATE account_servicerequest
+        SET dateFinished = CURRENT_DATE
+        WHERE workerID_id = p_workerID AND requestID = p_requestID;
+
+        SELECT 'SUCCESS' AS RESULT ;
+    END IF;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pendingservice`(IN `p_workerID` INT)
+BEGIN
+    SELECT *
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND dateAccepted IS NOT NULL AND dateFinished IS NULL AND status = 'Pending' ;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `failedservice`(IN `p_workerID` INT)
+BEGIN
+    SELECT *
+    FROM account_servicerequest
+    WHERE workerID_id = p_workerID AND dateAccepted IS NOT NULL AND status = 'Cancelled' ;
+END$$
+DELIMITER ;
