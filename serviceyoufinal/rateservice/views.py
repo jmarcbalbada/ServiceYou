@@ -64,6 +64,11 @@ class RateService(View):
     def post(self, request, client_id):
         rate_service_form = RateServiceForm(request.POST)
 
+        user_id = client_id
+        if user_id:
+            user = Client.objects.get(pk=user_id)
+            firstname = user.firstName if user else None
+
         if rate_service_form.is_valid():
             print(rate_service_form.cleaned_data)
             rate_service = rate_service_form.save(commit=False)
@@ -71,9 +76,11 @@ class RateService(View):
                 cursor.callproc('RateService', [rate_service.requestID,
                                                 rate_service.rateValue, rate_service.comment])
 
-            # Redirect to the enter-client-id view on success
-            return HttpResponseRedirect(reverse('client_dashboard'))
-
-        # If the form is not valid, show an error popup
-        return render(request, self.template_name,
-                      {'form': rate_service_form, 'client_id': client_id, 'error_popup': True})
+            # Redirect to the client_dashboard view on success
+            success_message = "Successfully rated request!"
+            return render(request, 'client_dashboard.html', {'form': rate_service_form, 'user_id': client_id, 'success_message': success_message, 'firstname': firstname})
+            # return HttpResponseRedirect(reverse('client_dashboard'))
+        else:
+            # If the form is not valid, show an error popup
+            error_message = "Unsuccessful rate process. Please fill in all fields."
+            return render(request, 'client_dashboard.html',{'form': rate_service_form, 'user_id': client_id, 'error_message': error_message, 'firstname': firstname})
