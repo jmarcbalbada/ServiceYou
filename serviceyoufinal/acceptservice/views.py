@@ -4,6 +4,7 @@ from django.db import connection
 
 def acceptservice(request):
     cursor = connection.cursor()
+    user_id = request.session.get('user_id')
     cursor.callproc('workerpendingrequest',[1])
     services = cursor.fetchall()
     cursor.close()

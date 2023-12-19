@@ -8,7 +8,7 @@ from .models import *
 from servicerequest.forms import ServiceRequestForm
 from rateservice.form import RateServiceForm
 from payrequest.form import PayForm
-
+from .forms import WorkerRegistrationForm
 
 #
 # # Create your views here.
@@ -131,3 +131,32 @@ class ClientRateServiceView(View):
     def post(self, request):
         # Your view logic for client rate service form submission
         pass
+
+
+from django.shortcuts import render, redirect
+from django.views import View
+from .forms import WorkerRegistrationForm
+
+
+class register(View):
+    template_name = 'register.html'
+
+    def get(self, request):
+        form = WorkerRegistrationForm()
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = WorkerRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page or login page
+            return redirect('http://127.0.0.1:8000/postservice/')
+
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
